@@ -1,3 +1,5 @@
+package com.deploymentzone.functional
+
 import scala.annotation.tailrec
 
 object Fibonacci {
