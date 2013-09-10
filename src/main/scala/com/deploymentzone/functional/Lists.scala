@@ -37,4 +37,14 @@ object Lists {
     tail(l.reverse).reverse
   }
 
+  def foldRight[A,B](l: List[A], default: B)(f: (A, B) => B): B = {
+    l match {
+      case Nil => default
+      case h :: t => f(h, foldRight(t, default)(f))
+    }
+  }
+
+  def length[A](l: List[A]): Int = {
+    foldRight(l, 0)((a, b) => b + 1)
+  }
 }
