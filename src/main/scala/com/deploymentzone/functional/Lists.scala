@@ -48,6 +48,10 @@ object Lists {
     loop(l.reverse, z)(f)
   }
 
+  def length[A](l: List[A]): Int = {
+    foldRight(l, 0)((a, b) => b + 1)
+  }
+
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
     @tailrec
     def loop(acc: B, rest: List[A]): B = {
@@ -59,18 +63,13 @@ object Lists {
     loop(z, l)
   }
 
-  def length[A](l: List[A]): Int = {
-    foldRight(l, 0)((a, b) => b + 1)
+  def sum[A: Numeric](l: List[A]): A = {
+    val numeric = implicitly[Numeric[A]]
+    foldLeft(l, numeric.zero)(numeric.plus)
   }
 
-
-  import scala.math.Numeric.Implicits._
-  private def zero[A: Numeric](a: A) = a - a
-
-  def sum[A: Numeric](l: List[A]): A = {
-    def plus(x: A, y: A) = x + y
-
-    // todo need to figure out how to get zero for any numeric type so Nil case is handled
-    foldLeft(l, zero(l.head))(plus)
+  def product[A: Numeric](l: List[A]): A = {
+    val numeric = implicitly[Numeric[A]]
+    foldLeft(l, numeric.one)(numeric.times)
   }
 }
