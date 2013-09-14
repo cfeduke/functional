@@ -72,4 +72,8 @@ object Lists {
     val numeric = implicitly[Numeric[A]]
     foldLeft(l, numeric.one)(numeric.times)
   }
+
+  def reverse[A](l: List[A]): List[A] = {
+    foldLeft(l, List[A]())((t, h) => h :: t)
+  }
 }
