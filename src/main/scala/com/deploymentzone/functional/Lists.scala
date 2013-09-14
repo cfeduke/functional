@@ -37,14 +37,40 @@ object Lists {
     tail(l.reverse).reverse
   }
 
-  def foldRight[A,B](l: List[A], default: B)(f: (A, B) => B): B = {
-    l match {
-      case Nil => default
-      case h :: t => f(h, foldRight(t, default)(f))
+  def foldRight[A,B](l: List[A], z: B)(f: (A, B) => B): B = {
+    def loop(l: List[A], z: B)(f: (A, B) => B): B = {
+      l match {
+        case Nil => z
+        case h :: t => f(h, loop(t, z)(f))
+      }
     }
+
+    loop(l.reverse, z)(f)
+  }
+
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
+    @tailrec
+    def loop(acc: B, rest: List[A]): B = {
+      rest match {
+        case Nil => acc
+        case h :: t => loop(f(acc, h), t)
+      }
+    }
+    loop(z, l)
   }
 
   def length[A](l: List[A]): Int = {
     foldRight(l, 0)((a, b) => b + 1)
+  }
+
+
+  import scala.math.Numeric.Implicits._
+  private def zero[A: Numeric](a: A) = a - a
+
+  def sum[A: Numeric](l: List[A]): A = {
+    def plus(x: A, y: A) = x + y
+
+    // todo need to figure out how to get zero for any numeric type so Nil case is handled
+    foldLeft(l, zero(l.head))(plus)
   }
 }
