@@ -49,7 +49,7 @@ object Lists {
   }
 
   def length[A](l: List[A]): Int = {
-    foldRight(l, 0)((a, b) => b + 1)
+    foldLeft(l, 0)((b, _) => b + 1)
   }
 
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
