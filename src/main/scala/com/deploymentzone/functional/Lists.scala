@@ -98,4 +98,19 @@ object Lists {
   }
 
   def doubleToString(l: List[Double]) = map(l)(_.toString)
+
+  def filter[A](l: List[A])(p: A => Boolean): List[A] = {
+    @tailrec
+    def loop(acc: List[A], rest: List[A]): List[A] = {
+      rest match {
+        case Nil => acc.reverse
+        case h :: t =>
+        p(h) match {
+          case true => loop(h :: acc, t)
+          case false => loop(acc, t)
+        }
+      }
+    }
+    loop(List[A](), l)
+  }
 }
