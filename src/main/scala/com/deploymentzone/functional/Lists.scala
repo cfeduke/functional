@@ -76,4 +76,26 @@ object Lists {
   def reverse[A](l: List[A]): List[A] = {
     foldLeft(l, List[A]())((t, h) => h :: t)
   }
+
+//  def flatten[A](l: List[List[A]]): List[A] = {
+//    foldLeft(l, List[A]())((result, list) => result :: foldLeft(list, List[A]())((acc, lst) => acc :: lst))
+//  }
+
+  def map[A, B](l: List[A])(f: A => B): List[B] = {
+    @tailrec
+    def loop(acc: List[B], rest: List[A]): List[B] = {
+      rest match {
+        case Nil => acc.reverse
+        case h :: t => loop(f(h) :: acc, t)
+      }
+    }
+    loop(List[B](), l)
+  }
+
+  def addOne[A: Numeric](l: List[A]) = {
+    val numeric = implicitly[Numeric[A]]
+    map(l)(numeric.plus(_, numeric.one))
+  }
+
+  def doubleToString(l: List[Double]) = map(l)(_.toString)
 }
