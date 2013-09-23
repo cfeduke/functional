@@ -113,4 +113,16 @@ object Lists {
     }
     loop(List[A](), l)
   }
+
+  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = {
+    @tailrec
+    def loop(acc: List[B], rest: List[A]): List[B] = {
+      rest match {
+        case Nil => acc
+        case h :: t => loop(acc ++ f(h), t)
+      }
+    }
+
+    loop(List[B](), l)
+  }
 }
