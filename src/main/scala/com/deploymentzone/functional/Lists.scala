@@ -125,4 +125,20 @@ object Lists {
 
     loop(List[B](), l)
   }
+
+  def combine[A,B](one: List[A], two: List[A])(f: (A, A) => B): List[B] = {
+    @tailrec
+    def loop(acc: List[B], restOne: List[A], restTwo: List[A]): List[B] = {
+      restOne match {
+        case Nil => acc.reverse
+        case headOne :: tailOne =>
+          restTwo match {
+            case Nil => acc.reverse
+            case headTwo :: tailTwo => loop(f(headOne, headTwo) :: acc, tailOne, tailTwo)
+          }
+      }
+    }
+
+    loop(List[B](), one, two)
+  }
 }
